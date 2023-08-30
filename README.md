@@ -54,17 +54,18 @@ Result:
 
 Now let's run the example
 
-Register the WfSpec:
+Deploy the `TaskDef` and run the TaskWorker:
+
+```
+go run ./src/worker
+```
+
+Now, in a separate terminal, register the WfSpec:
 
 ```
 go run ./src/deploy
 ```
 
-Run the worker:
-
-```
-go run ./src/worker
-```
 
 In another terminal, use `lhctl` to run the workflow:
 
