@@ -57,7 +57,7 @@ brew install littlehorse-enterprises/lh/lhctl
 Or, via `go`:
 
 ```
-go install https://github.com/littlehorse-enterprises/littlehorse/lhctl@latest
+go install https://github.com/littlehorse-enterprises/littlehorse/lhctl@0.5.2
 ```
 
 ## Local LH Server Setup
