@@ -23,6 +23,8 @@ github.com/littlehorse-enterprises/littlehorse v0.0.0-20231012224106-f21d6967582
 github.com/littlehorse-enterprises/littlehorse v0.0.0-20231012224106-f21d69675828/go.mod h1:Fr/ZBf230nhUmu2yLpzuVfmyylrQESUpQON+RitEzMg=
 github.com/littlehorse-enterprises/littlehorse v0.0.0-20231015032305-a845197cc292 h1:pKF1OwMtjjTYRwCiBasR2LY66WAqP1ry7a4+VWPiijw=
 github.com/littlehorse-enterprises/littlehorse v0.0.0-20231015032305-a845197cc292/go.mod h1:Fr/ZBf230nhUmu2yLpzuVfmyylrQESUpQON+RitEzMg=
+github.com/littlehorse-enterprises/littlehorse v0.0.0-20231127090806-79b522d687aa h1:9MRSgvxGejpfSOXI6vAcdsuToTDyTFiNAthXVYIAvtU=
+github.com/littlehorse-enterprises/littlehorse v0.0.0-20231127090806-79b522d687aa/go.mod h1:Fr/ZBf230nhUmu2yLpzuVfmyylrQESUpQON+RitEzMg=
 github.com/magiconair/properties v1.8.7 h1:IeQXZAiQcpL9mgcAe1Nu6cX9LLw6ExEHKjN0VQdvPDY=
 github.com/magiconair/properties v1.8.7/go.mod h1:Dhd985XPs7jluiymwWYZ0G4Z61jb3vdS329zhj2hYo0=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
