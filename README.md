@@ -43,7 +43,7 @@ Your system needs:
 ## Setup Go
 
 ```
-go get github.com/littlehorse-enterprises/littlehorse@0.5.2
+go get github.com/littlehorse-enterprises/littlehorse@0.7.0-alpha.2
 ```
 
 ## LittleHorse CLI
@@ -57,7 +57,7 @@ brew install littlehorse-enterprises/lh/lhctl@0.7
 Or, via `go`:
 
 ```
-go install github.com/littlehorse-enterprises/littlehorse/lhctl@0.7.0-alpha.1
+go install github.com/littlehorse-enterprises/littlehorse/lhctl@0.7.0-alpha.2
 ```
 
 ## Local LH Server Setup
