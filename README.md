@@ -42,8 +42,10 @@ Your system needs:
 
 ## Setup Go
 
+To add the LittleHorse Go Client to your project, you can use the following command:
+
 ```
-go get github.com/littlehorse-enterprises/littlehorse@0.7.0-alpha.2
+go get github.com/littlehorse-enterprises/littlehorse@0.7.2
 ```
 
 ## LittleHorse CLI
