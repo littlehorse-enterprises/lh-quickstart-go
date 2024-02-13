@@ -23,7 +23,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	err = worker.RegisterTaskDef(true)
+	err = worker.RegisterTaskDef()
 	if err != nil {
 		log.Fatal("Failed to register the task definition", err)
 	}
