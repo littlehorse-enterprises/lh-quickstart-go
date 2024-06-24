@@ -2,7 +2,7 @@ module lh-quickstart-go
 
 go 1.21
 
-require github.com/littlehorse-enterprises/littlehorse v0.0.0-20240516033734-7b120ed34cc9
+require github.com/littlehorse-enterprises/littlehorse v0.0.0-20240623025200-ba1508a333ef
 
 require (
 	cloud.google.com/go/compute v1.20.1 // indirect
