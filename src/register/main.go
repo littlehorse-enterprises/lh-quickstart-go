@@ -5,13 +5,11 @@ import (
 	"lh-quickstart-go/src"
 	"log"
 
-	"github.com/littlehorse-enterprises/littlehorse/sdk-go/common"
-	"github.com/littlehorse-enterprises/littlehorse/sdk-go/taskworker"
-	"github.com/littlehorse-enterprises/littlehorse/sdk-go/wflib"
+	"github.com/littlehorse-enterprises/littlehorse/sdk-go/littlehorse"
 )
 
 func main() {
-	config := common.NewConfigFromEnv()
+	config := littlehorse.NewConfigFromEnv()
 	client, err := config.GetGrpcClient()
 	if err != nil {
 		log.Fatal(err)
@@ -19,7 +17,7 @@ func main() {
 
 	// First, register the Task Definition
 	log.Default().Print("Registering task definition")
-	worker, err := taskworker.NewTaskWorker(config, src.Greet, "greet")
+	worker, err := littlehorse.NewTaskWorker(config, src.Greet, "greet")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -29,7 +27,7 @@ func main() {
 	}
 
 	// Register the Workflow Spec
-	workflow := wflib.NewWorkflow(src.QuickstartWorkflow, "quickstart")
+	workflow := littlehorse.NewWorkflow(src.QuickstartWorkflow, "quickstart")
 	putWf, err := workflow.Compile()
 	if err != nil {
 		log.Fatal(err)
@@ -39,5 +37,5 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	common.PrintProto(resp)
+	littlehorse.PrintProto(resp)
 }
