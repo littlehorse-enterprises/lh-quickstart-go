@@ -4,14 +4,13 @@ import (
 	"lh-quickstart-go/src"
 	"log"
 
-	"github.com/littlehorse-enterprises/littlehorse/sdk-go/common"
-	"github.com/littlehorse-enterprises/littlehorse/sdk-go/taskworker"
+	"github.com/littlehorse-enterprises/littlehorse/sdk-go/littlehorse"
 )
 
 func main() {
-	config := common.NewConfigFromEnv()
+	config := littlehorse.NewConfigFromEnv()
 
-	worker, err := taskworker.NewTaskWorker(config, src.Greet, "greet")
+	worker, err := littlehorse.NewTaskWorker(config, src.Greet, "greet")
 
 	if err != nil {
 		log.Fatal(err)
