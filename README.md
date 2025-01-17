@@ -1,7 +1,6 @@
 <p align="center">
-<img alt="LH" src="https://littlehorse.dev/img/logo.jpg" width="50%">
+<img alt="LittleHorse Logo" src="https://littlehorse.io/img/logo-wordmark-white.png" width="50%">
 </p>
-
 
 # LittleHorse Go QuickStart
 
@@ -15,16 +14,11 @@
   - [Register Workflow](#register-workflow)
   - [Run Workflow](#run-workflow)
   - [Run Task Worker](#run-task-worker)
-- [Advanced Topics](#advanced-topics)
-  - [Inspect the TaskRun](#inspect-the-taskrun)
-  - [Search for Someone's Workflow](#search-for-someones-workflow)
-  - [NodeRuns and TaskRuns](#noderuns-and-taskruns)
-  - [Debugging Errors](#debugging-errors)
 - [Next Steps](#next-steps)
 
 **Get started in under 5 minutes, or your money back!** :wink:
 
-This repo contains a minimal example to get you started using LittleHorse in Go. [LittleHorse](www.littlehorse.dev) is a high-performance orchestration engine which lets you build workflow-driven microservice applications with ease.
+This repo contains a minimal example to get you started using LittleHorse in Go. [LittleHorse](https://littlehorse.io) is a high-performance orchestration engine which lets you build workflow-driven microservice applications with ease.
 
 You can run this example in two ways:
 
@@ -36,23 +30,24 @@ In this example, we will run a classic "Greeting" workflow as a quickstart. The 
 # Prerequisites
 
 Your system needs:
-* `go`
-* [Optional] `brew` (to install `lhctl`). This has been tested on Linux and Mac.
-* `docker` (to run the LH Server) or access to a LH Cloud Sandbox.
+
+- `go`
+- `brew` (to install `lhctl`) (Mac/Linux/WSL)
+- `docker` (to run the LH Server) or access to a LH Cloud Sandbox.
 
 ## Setup Go
 
 To add the LittleHorse Go Client to your project, you can use the following command:
 
-```
-go get github.com/littlehorse-enterprises/littlehorse@v0.11.2
+```sh
+go get github.com/littlehorse-enterprises/littlehorse
 ```
 
 ## LittleHorse CLI
 
 Install the LittleHorse CLI:
 
-```
+```sh
 brew install littlehorse-enterprises/lh/lhctl
 ```
 
@@ -62,7 +57,7 @@ If you have obtained a private LH Cloud Sandbox, you can skip this step and just
 
 To run a LittleHorse Server locally in one command, you can run:
 
-```
+```sh
 docker run --name littlehorse -d -p 2023:2023 -p 8080:8080 ghcr.io/littlehorse-enterprises/littlehorse/lh-standalone:0.11.2
 ```
 
@@ -72,7 +67,7 @@ Using the local LittleHorse Server takes about 15-25 seconds to start up, but it
 
 At this point, whether you are using a local Docker deployment or a private LH Cloud Sandbox, you should be able to contact the LH Server:
 
-```
+```sh
 ->lhctl version
 lhctl version: 0.11.2 (Git SHA homebrew)
 Server version: 0.11.2
@@ -95,13 +90,13 @@ First, we run `src/register`, which does two things:
 
 A [`WfSpec`](https://littlehorse.dev/docs/concepts/workflows) specifies a process which can be orchestrated by LittleHorse. A [`TaskDef`](https://littlehorse.dev/docs/concepts/tasks) tells LittleHorse about a specification of a task that can be executed as a step in a `WfSpec`.
 
-```
-go run ./src/register/
+```sh
+go run ./src/register_metadata.go
 ```
 
 You can inspect your `WfSpec` with `lhctl` as follows. It's ok if the response doesn't make sense, we have a UI coming really soon which visualizes it for you!
 
-```bash
+```sh
 lhctl get wfSpec quickstart
 ```
 
@@ -109,9 +104,9 @@ Now, go to your dashboard in your browser (`http://localhost:8080`) and refresh 
 
 ## Run Workflow
 
-Now, let's run our first `WfRun`! Use `lhctl` to run an instance of our `WfSpec`. 
+Now, let's run our first `WfRun`! Use `lhctl` to run an instance of our `WfSpec`.
 
-```
+```sh
 # Run the 'quickstart' WfSpec, and set 'input-name' = "obi-wan"
 lhctl run quickstart input-name obi-wan
 ```
@@ -120,7 +115,7 @@ The response prints the initial status of the `WfRun`. Pull out the `id` and cop
 
 Let's look at our `WfRun` once again:
 
-```
+```sh
 lhctl get wfRun <wf_run_id>
 ```
 
@@ -128,7 +123,7 @@ If you would like to see it on the dashboard, refresh the `WfSpec` page and scro
 
 Note that the status is `RUNNING`! Why hasn't it completed? That's because we haven't yet started a worker which executes the `greet` tasks. Want to verify that? Let's search for all tasks in the queue which haven't been executed yet. You should see an entry whose `wfRunId` matches the Id from above:
 
-```
+```sh
 lhctl search taskRun --taskDefName greet --status TASK_SCHEDULED
 ```
 
@@ -138,150 +133,23 @@ You can also see the `TaskRun` node on the workflow. It's highlighted, meaning t
 
 Now let's start our worker, so that our blocked `WfRun` can finish:
 
-```
-go run ./src/worker
+```sh
+go run ./src/workers.go
 ```
 
 Once the worker starts up, please open another terminal and inspect our `WfRun` again:
 
-```
+```sh
 lhctl get wfRun <wf_run_id>
 ```
 
 Voila! It's completed. You can also verify that the Task Queue is empty now that the Task Worker executed all of the tasks:
 
-```
+```sh
 lhctl search taskRun --taskDefName greet --status TASK_SCHEDULED
 ```
 
 Please refresh the dashboard, and you can see the `WfRun` has been completed!
-
-# Advanced Topics
-
-You have now passed the requirements to reach the level of Jedi Youngling. Want to become a Padawan, or even a Knight? Then keep reading!
-
-Here are some cool commands which scratch the surface of observability offered to you by LittleHorse. Note that we are _almost_ done with a UI which will let you do this via click-ops rather than bash-ops.
-
-Also, note that everything we are doing here can be done programmatically via our SDK's, but it's easier to demonstrate with `lhctl`.
-
-## Inspect the TaskRun
-
-Let's find the completed `TaskRun`:
-
-```
-lhctl search taskRun --taskDefName greet --status TASK_SUCCESS
-```
-
-Take the output from above, and inspect it! Notice that you can see the input variables and also the output, which is a greeting string.
-
-```
-lhctl get taskRun <wf_run_id> <task_guid>
-```
-
-## Search for Someone's Workflow
-
-Remember we passed an `input-name` variable to our workflow? If you look in `register_workflow.py`, specifically the `get_workflow()` function, you can see that we created an Index on the variable. This means we can search for variables by their value!
-
-```
-lhctl search variable --varType STR --wfSpecName quickstart --name input-name --value obi-wan
-```
-
-And the following should return an empty list (unless, of course, you do `lhctl run quickstart input-name asdfasdf`)
-
-```
-lhctl search variable --varType STR --wfSpecName quickstart --name input-name --value asdfasdf
-```
-
-## NodeRuns and TaskRuns
-
-Let's look at our `WfRun`:
-
-```
--> lhctl get wfRun <wfRunId>
-{
-  "id": "4a139cd6326944d8a2f2021385a259e0",
-  "wfSpecName": "quickstart",
-  "wfSpecVersion": 0,
-  "status": "COMPLETED",
-  "startTime": "2023-10-15T04:56:26.292Z",
-  "endTime": "2023-10-15T04:56:57.158Z",
-  "threadRuns": [
-    {
-      "number": 0,
-      "status": "COMPLETED",
-      "threadSpecName": "entrypoint",
-      "startTime": "2023-10-15T04:56:26.350Z",
-      "endTime": "2023-10-15T04:56:57.154Z",
-      "childThreadIds": [],
-      "haltReasons": [],
-      "currentNodePosition": 2,
-      "handledFailedChildren": [],
-      "type": "ENTRYPOINT"
-    }
-  ],
-  "pendingInterrupts": [],
-  "pendingFailures": []
-}
-```
-
-There are a few things to note:
-* The `status` is `COMPLETED`
-* There is one `ThreadRun`. That makes sense, since we didn't add multi-threading to the `WfRun`.
-* The `currentNodePosition` is 2.
-
-What is a `NodeRun`? A `NodeRun` is a step in a `ThreadRun`. Our workflow's main `ThreadRun` has three steps:
-
-1. The `ENTRYPOINT` node
-2. The `TASK` node to execute the `greet` task
-3. The `EXIT` node, which wraps things up.
-
-Let's see all of our nodes via:
-
-```
-lhctl list nodeRun <wfRunId>
-```
-
-Note that the second `nodeRun` has a `task` field, points to the `TaskRun` we saw earlier. You can find it via:
-
-```
-lhctl get taskRun <wfRunId> <taskGuid>
-```
-
-## Debugging Errors
-
-What happens if a Task Run fails? Edit `worker.go` and make the `greeting()` function throw an error of choice (maybe `errors.New("asdf")` or something like that). Then, restart the worker via `go run ./src/worker/`.
-
-Run another workflow:
-
-```
-lhctl run quickstart input-name anakin
-```
-
-Then, `lhctl get wfRun <wfRunId>` should show that the workflow failed. It should also show that `currentNodePosition` for `ThreadRun` `0` is `1`. Let's inspect the NodeRun:
-
-```
-lhctl get nodeRun <wfRunId> 0 1
-```
-
-It's a `TaskRun`! Let's see what happened:
-
-```
-lhctl get taskRun <wfRunId> <taskGuid>
-```
-
-As you can see, you can get the stack trace through the LittleHorse API.
-
-You can also find the `TaskRun` by searching for failed tasks. Remember that all of this will be presented in a super-cool UI once we have it finished.
-
-```
-lhctl search taskRun --taskDefName greet --status TASK_FAILED
-
-# or search for workflows by their status
-lhctl search wfRun --wfSpecName quickstart --status ERROR
-lhctl search wfRun --wfSpecName quickstart --status COMPLETED
-```
-
-If you want to handle such failures in your workflow, check our [exception handling documentation](www.littlehorse.dev/docs/concepts/exception-handling).
 
 # Next Steps
 
@@ -289,13 +157,13 @@ If you've made it this far, then it's time you become a full-fledged LittleHorse
 
 Want to do more cool stuff with LittleHorse and Go? You can find more Go examples [here](https://github.com/littlehorse-enterprises/littlehorse/tree/master/sdk-go). This example only shows rudimentary features like tasks and variables. Some additional features not covered in this quickstart include:
 
-* Conditionals
-* Loops
-* External Events (webhooks/signals etc)
-* Interrupts
-* User Tasks
-* Multi-Threaded Workflows
-* Workflow Exception Handling
+- Conditionals
+- Loops
+- External Events (webhooks/signals etc)
+- Interrupts
+- User Tasks
+- Multi-Threaded Workflows
+- Workflow Exception Handling
 
 We also have quickstarts in [Java](https://github.com/littlehorse-enterprises/lh-quickstart-java) and [Python](https://github.com/littlehorse-enterprises/lh-quickstart-python). Support for .NET is coming soon.
 
