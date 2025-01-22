@@ -1,26 +1,8 @@
-package workflow
+package main
 
 import (
-	"errors"
-	"math/rand"
-
 	"github.com/littlehorse-enterprises/littlehorse/sdk-go/littlehorse"
 )
-
-func VerifyIdentity(firstName, lastName string, ssn int) (string, error) {
-	if rand.Float32() < 0.25 {
-		return "", errors.New("the external identity verification API is down")
-	}
-	return "Successfully called external API to request verification for " + firstName + " " + lastName, nil
-}
-
-func NotifyCustomerVerified(firstName, lastName string) string {
-	return "Notification sent to customer " + firstName + " " + lastName + " that their identity has been verified"
-}
-
-func NotifyCustomerNotVerified(firstName, lastName string) string {
-	return "Notification sent to customer " + firstName + " " + lastName + " that their identity has not been verified"
-}
 
 const (
 	WORKFLOW_NAME                     = "quickstart"
@@ -50,7 +32,9 @@ func QuickstartWorkflow(wf *littlehorse.WorkflowThread) {
 	wf.HandleError(identityVerificationResult, &exceptionName, func(handler *littlehorse.WorkflowThread) {
 		handler.Execute(NOTIFY_CUSTOMER_NOT_VERIFIED_TASK, firstName, lastName)
 		message := "Unable to verify customer identity in time."
-		handler.Fail("d", "customer-not-verified", &message)
+
+		// Make the handler fail, so the WfRun stops here.
+		handler.Fail(nil, "customer-not-verified", &message)
 	})
 
 	// Assign the output of the ExternalEvent to the `identityVerified` variable.
