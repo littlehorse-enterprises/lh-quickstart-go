@@ -14,14 +14,14 @@ const (
 
 func QuickstartWorkflow(wf *littlehorse.WorkflowThread) {
 	// Declare the input variables for the workflow.
-	firstName := wf.DeclareStr("first-name", nil).Searchable().Required()
-	lastName := wf.DeclareStr("last-name", nil).Searchable().Required()
+	firstName := wf.DeclareStr("first-name").Searchable().Required()
+	lastName := wf.DeclareStr("last-name").Searchable().Required()
 
 	// Social Security Numbers are sensitive, so we mask the variable.
-	ssn := wf.DeclareInt("ssn", nil).MaskedValue().Required()
+	ssn := wf.DeclareInt("ssn").MaskedValue().Required()
 
 	// Internal variable representing whether the customer's identity has been verified.
-	identityVerified := wf.DeclareBool("identity-verified", nil).Searchable()
+	identityVerified := wf.DeclareBool("identity-verified").Searchable()
 
 	// Call the verify-identity task and retry it up to 3 times if it fails
 	wf.Execute(VERIFY_IDENTITY_TASK, firstName, lastName, ssn).WithRetries(3)

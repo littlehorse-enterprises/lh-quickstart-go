@@ -97,8 +97,10 @@ func startTaskWorkers() {
 		notifyCustomerNotVerifiedWorker.Close()
 	}()
 
-	log.Default().Print("Starting Task Worker")
-	verifyIdentityWorker.Start()
-	notifyCustomerVerifiedWorker.Start()
-	notifyCustomerNotVerifiedWorker.Start()
+	log.Default().Print("Starting Task Workers")
+	go verifyIdentityWorker.Start()
+	go notifyCustomerVerifiedWorker.Start()
+	go notifyCustomerNotVerifiedWorker.Start()
+
+	select {}
 }
