@@ -144,7 +144,7 @@ You can also see the `TaskRun` node on the workflow. It's highlighted, meaning t
 Now let's start our workers, so that our blocked `WfRun` can finish. What this does is start a daemon which calls the `verify_identity()` Python function for every scheduled `TaskRun` with appropriate parameters.
 
 ```sh
-go run ./src worker
+go run ./src workers
 ```
 
 Once the workers starts up, please open another terminal and inspect our `WfRun` again:
