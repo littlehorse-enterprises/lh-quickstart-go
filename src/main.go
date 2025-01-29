@@ -13,8 +13,8 @@ import (
 var config = littlehorse.NewConfigFromEnv()
 
 func main() {
-	if len(os.Args) != 2 || (os.Args[1] != "register" && os.Args[1] != "worker") {
-		fmt.Fprintln(os.Stderr, "Please provide one argument: either 'register' or 'worker'")
+	if len(os.Args) != 2 || (os.Args[1] != "register" && os.Args[1] != "workers") {
+		fmt.Fprintln(os.Stderr, "Please provide one argument: either 'register' or 'workers'")
 		os.Exit(1)
 	}
 
